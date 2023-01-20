@@ -55,7 +55,7 @@ const Products = {
         axios
             .get("/GetAllUrunler", { params: params })
             .then(response => response.data),
-    details: (id: string) => request.get(`/GetAllUrunById/${id}`),
+    details: (urunId: string) => request.get(`/GetAllUrunById/${urunId}`),
     create: (products: IProductDATA) => request.post("/UpdateUrunler", products),
     update: (products: IProductDATA) =>
         request.put(`/InsertLanguage/${products.urunId}`, products),
