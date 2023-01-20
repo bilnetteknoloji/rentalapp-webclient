@@ -2,55 +2,59 @@ import React, { FC, useState, useEffect } from "react";
 import GallerySlider from "../../components/GallerySlider/GallerySlider";
 import BtnLikeIcon from "../../components/BtnLikeIcon/BtnLikeIcon";
 import SaleOffBadge from "../../components/SaleOffBadge/SaleOffBadge";
-import { productService } from "../../data/productService";
-import { AxiosError } from 'axios';
+import { IProductDATA, IProductsPictureDATA, IProductsPriceDATA } from "../../data/types";
+import {ProductDataService, Products, ProductsPicture, ProductsPrice} from "../../data/productService";
 
-interface StayCardProps {
+
+export interface StayCardProps {
     className?: string;
-    productId: number;
+    data?: ProductDataService;
     size?: "default" | "small";
+    params?: any; // or give it a more specific type
 }
 
-const StayCard: FC<StayCardProps> = ({ className = "", productId, size = "default" }) => {
-    const [productData, setProductData] = useState({});
-    const [commentsData, setCommentsData] = useState([]);
-    const [pictureData, setPictureData] = useState([]);
-    const [priceData, setPriceData] = useState({});
-    const [currencyData, setCurrencyData] = useState({});
+const StayCard: FC<StayCardProps> = ({ size = "default", className = "", data, params }) => {
+    const [productData, setProductData] = useState<IProductDATA[]>([]);
+    const [pictureData, setPictureData] = useState<IProductsPictureDATA[]>([]);
+    const [priceData, setPriceData] = useState<IProductsPriceDATA[]>([]);
 
     useEffect(() => {
-        productService
-            .getProductData(productId)
-            .then((data) => setProductData(data))
-            .catch((err) => console.log(err));
-        productService
-            .getProductComments(productId)
-            .then((data) => setCommentsData(data))
-            .catch((err) => console.log(err));
-        productService
-            .getProductPictures(productId)
-            .then((data) => setPictureData(data))
-            .catch((err) => console.log(err));
-        productService
-            .getProductPrice(productId)
-            .then((data) => setPriceData(data))
-            .catch((err) => console.log(err));
-        productService
-            .getProductCurrency(productId)
-            .then((data) => setCurrencyData(data))
-            .catch((err) => console.log(err));
-    }, [productId]);
+        Products.list(params)
+            .then(data => {
+                setProductData(Object.values(data));
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }, []);
 
-    // Render component using the data retrieved from the API
-};
+    useEffect(() => {
+        ProductsPicture.list(params)
+            .then(data => {
+                setPictureData(Object.values(data));
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }, []);
 
+    useEffect(() => {
+        ProductsPrice.list(params)
+            .then(data => {
+                setPriceData(Object.values(data));
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }, []);
 
+    const { urunId } = ProductDataService;
 
     const renderSliderGallery = () => {
         return (
             <div className="relative w-full">
                 <GallerySlider
-                    uniqueID={`StayCard_${id}`}
+                    uniqueID={`StayCard_${urunId}`}
                     ratioClass="aspect-w-4 aspect-h-3 "
                     galleryImgs={galleryImgs}
                     href={href}
