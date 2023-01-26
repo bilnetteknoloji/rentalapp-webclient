@@ -48,8 +48,6 @@ const StayCard: FC<StayCardProps> = ({ size = "default", className = "", data, p
             });
     }, []);
 
-    const { urunId } = ProductDataService;
-
     const renderSliderGallery = () => {
         return (
             <div className="relative w-full">
