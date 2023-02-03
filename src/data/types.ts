@@ -1,3 +1,23 @@
+// ##### DTO ##### //
+export  interface  IProductsDTO{
+  UrunId: number;
+  SinifId: number;
+  UrunKodu: string;
+  Adres: string;
+  BolgeId: number;
+  IlId: number;
+  IlceId: number;
+  UrunAdi: string;
+  Puan: number;
+  Fiyat: number;
+  Resim: string;
+  DilId: number;
+  Link: string;
+}
+
+
+
+
 //  ######  Product  ######## //
 export interface IProductDATA {
   urunId:number;

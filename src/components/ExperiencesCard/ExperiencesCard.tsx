@@ -41,9 +41,9 @@ const ExperiencesCard: FC<ExperiencesCardProps> = ({
         return (
             <div className="relative w-full rounded-2xl overflow-hidden will-change-transform">
                 <GallerySlider
-                    uniqueID={`ExperiencesCard_${id}`}
+                    UrunId={`ExperiencesCard_${id}`}
                     ratioClass={ratioClass}
-                    galleryImgs={galleryImgs}
+                    Resim={galleryImgs}
                     href={href}
                 />
                 <BtnLikeIcon isLiked={like} className="absolute right-3 top-3" />

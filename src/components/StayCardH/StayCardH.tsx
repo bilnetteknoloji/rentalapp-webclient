@@ -1,50 +1,50 @@
-import React, { FC } from "react";
+import React, {FC, useEffect, useState} from "react";
 import GallerySlider from "components/GallerySlider/GallerySlider";
 import { DEMO_STAY_LISTINGS } from "data/listings";
-import { StayDataType } from "data/types";
+import {IProductsDTO, StayDataType} from "data/types";
 import StartRating from "components/StartRating/StartRating";
 import { Link } from "react-router-dom";
 import BtnLikeIcon from "components/BtnLikeIcon/BtnLikeIcon";
 import SaleOffBadge from "components/SaleOffBadge/SaleOffBadge";
 import Badge from "shared/Badge/Badge";
+import {ProductHomes} from "../../data/productService";
 
-export interface StayCardHProps {
+export interface StayCardH{
     className?: string;
-    data?: StayDataType;
+    size?: "default" | "small";
+    params?: any; // or give it a more specific type
+    data: IProductsDTO
 }
 
-const DEMO_DATA = DEMO_STAY_LISTINGS[0];
+const StayCard: FC<StayCardH> = ({
+                                         size = "default",
+                                         className = "",
+                                         params,
+                                         data
+                                     }) => { const {UrunId,Resim, Link, SinifId, UrunAdi, Adres, Fiyat} = data;
 
-const StayCardH: FC<StayCardHProps> = ({
-                                           className = "",
-                                           data = DEMO_DATA,
-                                       }) => {
-    const {
-        galleryImgs,
-        listingCategory,
-        address,
-        title,
-        href,
-        like,
-        saleOff,
-        isAds,
-        price,
-        reviewStart,
-        reviewCount,
-        id,
-    } = data;
+    const [products, setProducts] = useState<IProductsDTO[]>([]);
+
+    useEffect(() => {
+        ProductHomes.list(params)
+            .then((data) => {
+                setProducts(Object.values(data));
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, []);
+
 
     const renderSliderGallery = () => {
         return (
             <div className="relative flex-shrink-0 w-full md:w-72 ">
                 <GallerySlider
                     ratioClass="aspect-w-6 aspect-h-5"
-                    galleryImgs={galleryImgs}
-                    uniqueID={`StayCardH_${id}`}
-                    href={href}
+                    Resim={Resim}
+                    UrunId={`StayCardH_${UrunId}`}
+                    href={Link}
                 />
-                <BtnLikeIcon isLiked={like} className="absolute right-3 top-3" />
-                {saleOff && <SaleOffBadge className="absolute left-3 top-3" />}
             </div>
         );
     };
@@ -104,23 +104,16 @@ const StayCardH: FC<StayCardHProps> = ({
                 <div className="space-y-2">
                     <div className="text-sm text-neutral-500 dark:text-neutral-400">
             <span>
-              {listingCategory.name} in {address}
+              {SinifId} in {Adres}
             </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        {isAds && <Badge name="ADS" color="green" />}
-                        <h2 className="text-lg font-medium capitalize">
-                            <span className="line-clamp-1">{title}</span>
-                        </h2>
                     </div>
                 </div>
                 <div className="hidden sm:block w-14 border-b border-neutral-100 dark:border-neutral-800 my-4"></div>
                 {renderTienIch()}
                 <div className="w-14 border-b border-neutral-100 dark:border-neutral-800 my-4"></div>
                 <div className="flex justify-between items-end">
-                    <StartRating reviewCount={reviewCount} point={reviewStart} />
                     <span className="text-base font-semibold text-secondary-500">
-            {price}
+            {Fiyat}
                         {` `}
                         <span className="text-sm text-neutral-500 dark:text-neutral-400 font-normal">
               /night
@@ -136,7 +129,7 @@ const StayCardH: FC<StayCardHProps> = ({
             className={`nc-StayCardH group relative bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl overflow-hidden hover:shadow-xl transition-shadow will-change-transform ${className}`}
             data-nc-id="StayCardH"
         >
-            <Link to={href} className="absolute inset-0"></Link>
+            <Link to={Link} className="absolute inset-0"/>
             <div className="grid grid-cols-1 md:flex md:flex-row ">
                 {renderSliderGallery()}
                 {renderContent()}

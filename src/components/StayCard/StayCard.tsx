@@ -2,48 +2,33 @@ import React, { FC, useState, useEffect } from "react";
 import GallerySlider from "../../components/GallerySlider/GallerySlider";
 import BtnLikeIcon from "../../components/BtnLikeIcon/BtnLikeIcon";
 import SaleOffBadge from "../../components/SaleOffBadge/SaleOffBadge";
-import { IProductDATA, IProductsPictureDATA, IProductsPriceDATA } from "../../data/types";
-import {ProductDataService, Products, ProductsPicture, ProductsPrice} from "../../data/productService";
-
+import {IProductsDTO} from "../../data/types";
+import {ProductHomes} from "../../data/productService";
+import {data} from "autoprefixer";
+import StartRating from "../StartRating/StartRating";
 
 export interface StayCardProps {
     className?: string;
-    data?: ProductDataService;
     size?: "default" | "small";
     params?: any; // or give it a more specific type
+    data: IProductsDTO
 }
 
-const StayCard: FC<StayCardProps> = ({ size = "default", className = "", data, params }) => {
-    const [productData, setProductData] = useState<IProductDATA[]>([]);
-    const [pictureData, setPictureData] = useState<IProductsPictureDATA[]>([]);
-    const [priceData, setPriceData] = useState<IProductsPriceDATA[]>([]);
+const StayCard: FC<StayCardProps> = ({
+                                         size = "default",
+                                         className = "",
+                                         params,
+                                          data
+                                     }) => { const {UrunId,Resim, Link, SinifId, UrunAdi, Adres, Fiyat} = data;
+
+    const [products, setProducts] = useState<IProductsDTO[]>([]);
 
     useEffect(() => {
-        Products.list(params)
-            .then(data => {
-                setProductData(Object.values(data));
+        ProductHomes.list(params)
+            .then((data) => {
+                setProducts(Object.values(data));
             })
-            .catch(error => {
-                console.error(error);
-            });
-    }, []);
-
-    useEffect(() => {
-        ProductsPicture.list(params)
-            .then(data => {
-                setPictureData(Object.values(data));
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }, []);
-
-    useEffect(() => {
-        ProductsPrice.list(params)
-            .then(data => {
-                setPriceData(Object.values(data));
-            })
-            .catch(error => {
+            .catch((error) => {
                 console.error(error);
             });
     }, []);
@@ -52,13 +37,11 @@ const StayCard: FC<StayCardProps> = ({ size = "default", className = "", data, p
         return (
             <div className="relative w-full">
                 <GallerySlider
-                    uniqueID={`StayCard_${urunId}`}
+                    UrunId={`StayCard_${UrunId}`}
                     ratioClass="aspect-w-4 aspect-h-3 "
-                    galleryImgs={galleryImgs}
-                    href={href}
+                    Resim={Resim}
+                    href={Link}
                 />
-                <BtnLikeIcon isLiked={like} className="absolute right-3 top-3 z-[1]" />
-                {saleOff && <SaleOffBadge className="absolute left-3 top-3" />}
             </div>
         );
     };
@@ -68,16 +51,15 @@ const StayCard: FC<StayCardProps> = ({ size = "default", className = "", data, p
             <div className={size === "default" ? "p-4 space-y-4" : "p-3 space-y-2"}>
                 <div className="space-y-2">
                     <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                        {listingCategory.name} · {bedrooms} beds
+                        {SinifId} · {SinifId} beds
                     </span>
                     <div className="flex items-center space-x-2">
-                        {isAds && <Badge name="ADS" color="green" />}
                         <h2
                             className={` font-medium capitalize ${
                                 size === "default" ? "text-lg" : "text-base"
                             }`}
                         >
-                            <span className="line-clamp-1">{title}</span>
+                            <span className="line-clamp-1">{UrunAdi}</span>
                         </h2>
                     </div>
                     <div className="flex items-center text-neutral-500 dark:text-neutral-400 text-sm space-x-2">
@@ -107,25 +89,15 @@ const StayCard: FC<StayCardProps> = ({ size = "default", className = "", data, p
                                 d="M11 21l-6-6 6-6"
                             />
                         </svg>
-                        <span className="text-sm">{address}</span>
+                        <span className="text-sm">{Adres}</span>
                     </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                    <StartRating start={reviewStart} count={reviewCount} />
-                    <Link
-                        to={href}
-                        className={`text-base font-medium text-neutral-800 dark:text-neutral-200 hover:underline ${
-                            size === "default" ? "" : "text-sm"
-                        }`}
-                    >
-                        See more
-                    </Link>
-                </div>
+
                 <div className="flex items-center space-x-2">
                     <span className="text-sm text-neutral-500 dark:text-neutral-400">Regular Price:</span>
-                    <span className="text-sm text-neutral-800 dark:text-neutral-200">${regularPrice}</span>
+                    <span className="text-sm text-neutral-800 dark:text-neutral-200">${Fiyat}</span>
                     <span className="text-sm text-neutral-500 dark:text-neutral-400">Discount Price:</span>
-                    <span className="text-sm text-neutral-800 dark:text-neutral-200">${discountPrice}</span>
+                    <span className="text-sm text-neutral-800 dark:text-neutral-200">${Fiyat}</span>
                 </div>
             </div>
         );

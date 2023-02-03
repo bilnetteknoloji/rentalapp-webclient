@@ -34,7 +34,13 @@ import {
     IPreReservationsAdditionalServiceDATA,
     IVariablesGroupDATA,
     IVariablesGroupLanguageDATA,
-    IVariablesLanguageDATA, IVariablesDATA, IProductsVariablesDATA, IProductsContractDATA, IPagesDATA, IfaqQuestionsDATA
+    IVariablesLanguageDATA,
+    IVariablesDATA,
+    IProductsVariablesDATA,
+    IProductsContractDATA,
+    IPagesDATA,
+    IfaqQuestionsDATA,
+    IProductsDTO
 } from "./types";
 import axios from "axios";
 import * as endpoints from '../data/endpoints';
@@ -573,8 +579,19 @@ const faqQuestions = {
     unattend: (SoruId: string) => request.del(`/DeleteSssSorular/${SoruId}/attend`)
 };
 
+const ProductHomes = {
+    list: (params: URLSearchParams): Promise<IProductsDTO> =>
+        axios
+            .get("/Homes", { params: params })
+            .then(response => response.data),
+};
+
+
+
+
 
 export {Products,
+    ProductHomes,
     ShowcaseProducts,
     ProductsBaths,
     ProductsBedrooms,
