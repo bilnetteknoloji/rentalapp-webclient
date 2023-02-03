@@ -37,9 +37,9 @@ const StayCard: FC<StayCardProps> = ({
         return (
             <div className="relative w-full">
                 <GallerySlider
-                    UrunId={`StayCard_${UrunId}`}
+                    uniqueID={`StayCard_${UrunId}`}
                     ratioClass="aspect-w-4 aspect-h-3 "
-                    Resim={Resim}
+                    galleryImgs={Resim}
                     href={Link}
                 />
             </div>

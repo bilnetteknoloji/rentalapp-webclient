@@ -1,12 +1,7 @@
 import React, {FC, useEffect, useState} from "react";
 import GallerySlider from "components/GallerySlider/GallerySlider";
-import { DEMO_STAY_LISTINGS } from "data/listings";
 import {IProductsDTO, StayDataType} from "data/types";
-import StartRating from "components/StartRating/StartRating";
 import { Link } from "react-router-dom";
-import BtnLikeIcon from "components/BtnLikeIcon/BtnLikeIcon";
-import SaleOffBadge from "components/SaleOffBadge/SaleOffBadge";
-import Badge from "shared/Badge/Badge";
 import {ProductHomes} from "../../data/productService";
 
 export interface StayCardH{
@@ -129,7 +124,6 @@ const StayCard: FC<StayCardH> = ({
             className={`nc-StayCardH group relative bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl overflow-hidden hover:shadow-xl transition-shadow will-change-transform ${className}`}
             data-nc-id="StayCardH"
         >
-            <Link to={Link} className="absolute inset-0"/>
             <div className="grid grid-cols-1 md:flex md:flex-row ">
                 {renderSliderGallery()}
                 {renderContent()}

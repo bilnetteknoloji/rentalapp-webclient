@@ -1,26 +1,26 @@
 import Glide from "@glidejs/glide";
-import useNcId from "../../hooks/useNcId";
+import useNcId from "hooks/useNcId";
 import React, { FC, useEffect, useMemo } from "react";
-import NcImage from "../../shared/NcImage/NcImage";
-import NextPrev from "../../shared/NextPrev/NextPrev";
+import NcImage from "shared/NcImage/NcImage";
+import NextPrev from "shared/NextPrev/NextPrev";
 import { Link } from "react-router-dom";
 
 export interface GallerySliderProps {
     className?: string;
-    Resim: string[];
+    galleryImgs: string[];
     ratioClass?: string;
-    UrunId: string;
+    uniqueID: string;
     href?: string;
 }
 
 const GallerySlider: FC<GallerySliderProps> = ({
                                                    className = "",
-                                                   Resim,
+                                                   galleryImgs,
                                                    ratioClass = "aspect-w-4 aspect-h-3",
-                                                   UrunId = "UrunId",
+                                                   uniqueID = "uniqueID",
                                                    href = "/listing-stay-detail",
                                                }) => {
-    const UNIQUE_CLASS = `gallerySlider__${UrunId}` + useNcId();
+    const UNIQUE_CLASS = `gallerySlider__${uniqueID}` + useNcId();
 
     let MY_GLIDEJS = useMemo(() => {
         return new Glide(`.${UNIQUE_CLASS}`, {
@@ -34,7 +34,7 @@ const GallerySlider: FC<GallerySliderProps> = ({
         setTimeout(() => {
             MY_GLIDEJS.mount();
         }, 10);
-    }, [MY_GLIDEJS, UNIQUE_CLASS, Resim]);
+    }, [MY_GLIDEJS, UNIQUE_CLASS, galleryImgs]);
 
     const renderDots = () => {
         return (
@@ -42,7 +42,7 @@ const GallerySlider: FC<GallerySliderProps> = ({
                 className="glide__bullets flex items-center justify-center absolute bottom-2 left-1/2 transform -translate-x-1/2 space-x-1.5"
                 data-glide-el="controls[nav]"
             >
-                {Resim.map((_, i) => (
+                {galleryImgs.map((_, i) => (
                     <button
                         className="glide__bullet w-1.5 h-1.5 rounded-full bg-neutral-300"
                         key={i}
@@ -58,7 +58,7 @@ const GallerySlider: FC<GallerySliderProps> = ({
             <div className={`${UNIQUE_CLASS} relative group overflow-hidden`}>
                 <div className="glide__track" data-glide-el="track">
                     <ul className="glide__slides">
-                        {Resim.map((item, index) => (
+                        {galleryImgs.map((item, index) => (
                             <li key={index} className="glide__slide">
                                 <Link to={href} className={`block ${ratioClass}`}>
                                     <NcImage src={item} />
